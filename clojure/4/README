@@ -1,0 +1,35 @@
+# lab4
+
+## Условие
+
+Задан набор символов и число n. Опишите функцию, которая возвращает список всех строк длины n, состоящих из этих символов и не содержащих двух одинаковых символов, идущих подряд.
+
+Демонстрацию работоспособности обеспечить с помощью модульных тестов. Данное требование относится ко всем последующим задачам.
+
+## Ограничения
+
+Не допускается использовать циклы.
+
+## Пример
+
+Для символов 'а', 'b', 'c' и n=2 результат должен быть ("ab" "ac" "ba" "bc" "ca" "cb") с точностью до перестановки.
+
+## Usage
+
+lein test
+
+# License
+
+DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+Version 2, December 2004
+
+Copyright (C) 2004 Alexander Zhirov <aleks@aradmin.org.ru>
+
+Everyone is permitted to copy and distribute verbatim or modified
+copies of this license document, and changing it is allowed as long
+as the name is changed.
+
+DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+0. You just DO WHAT THE FUCK YOU WANT TO.
