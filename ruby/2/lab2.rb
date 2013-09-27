@@ -31,11 +31,11 @@ class ParallelArray < Array
 	protected 
 	def _parallel &func
 		_chunk_size = (size / @threads.to_f).ceil
-		_threads = each_slice(_chunk_size).map do |chunk|
-			Thread.new do
+		_threads = self.each_slice(_chunk_size).map { |chunk|
+			Thread.new {
 				func.call(chunk)
-			end
-		end
+			}
+		}
 		_threads.map {|thread|
 			thread.value
 		}
