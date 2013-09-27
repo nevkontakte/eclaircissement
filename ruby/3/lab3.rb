@@ -20,7 +20,7 @@ lines = readlines.map { |line|
 }.select{|i| i != nil}.map { |line|
 	# Convert metch result into a hash
 	line = line.to_a
-	_, date, year, month, day, time, hour, min, sec, tag, errno1, errno2, message = line
+	_, date, year, month, day, time, hour, min, sec, tag, errno1, errno2, message, *rest = line
 	
 	data = {
 		:date => date,
@@ -36,8 +36,7 @@ lines = readlines.map { |line|
 		:errno2 => errno2,
 		:message => message
 	}
-	rest = line.to_a[data.size+1..line.size].each_slice(2).to_a
-	data.merge Hash[rest]
+	data.merge Hash[rest.each_slice(2).to_a]
 }
 puts lines[1..3], "\n"
 

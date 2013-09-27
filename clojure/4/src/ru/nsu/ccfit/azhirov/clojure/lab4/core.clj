@@ -1,4 +1,4 @@
-(ns lab4.core)
+(ns ru.nsu.ccfit.azhirov.clojure.lab4.core)
 
 (defn wordlist
   "Generate worl list of specified length for an alphabet"

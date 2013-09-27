@@ -1,5 +1,5 @@
-(ns lab4.test.core
-  (:use [lab4.core])
+(ns ru.nsu.ccfit.azhirov.clojure.lab4.test.core
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab4.core])
   (:use [clojure.test]))
 
 (deftest wordlist_abc
