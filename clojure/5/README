@@ -1,0 +1,33 @@
+# lab5
+
+## Условие
+
+ Реализовать функцию (оператор), принимающую аргументом функцию от одной переменной f и возвращающую функцию одной переменной, вычисляющую (численно) выражение:
+
+\[
+\int_{0}^{x} f(t) dt
+\]
+
+Оптимизировать с использованием мемоизации для задач типа построения графиков (т.е. многократный вызов функции в разных точках) Рекомендуется использовать метод численного интегрирования с постоянным шагом (напр. метод трапеций)
+
+Обеспечить покрытие тестами.
+
+## Usage
+
+lein test
+
+# License
+
+DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+Version 2, December 2004
+
+Copyright (C) 2013 Alexander Zhirov <aleks@aradmin.org.ru>
+
+Everyone is permitted to copy and distribute verbatim or modified
+copies of this license document, and changing it is allowed as long
+as the name is changed.
+
+DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+0. You just DO WHAT THE FUCK YOU WANT TO.
