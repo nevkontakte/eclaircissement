@@ -4,8 +4,8 @@
 
 (deftest wordlist_abc
   (is (= `("") (wordlist 0 `("a", "b", "c"))))
-  (is (= `("a", "b", "c") (wordlist 1 `("a", "b", "c"))))
-  (is (= `("ab", "ac", "ba", "bc", "ca", "cb") (wordlist 2 `("a", "b", "c"))))
+  (is (= `#{"a", "b", "c"} (into #{} (wordlist 1 `("a", "b", "c")))))
+  (is (= `#{"ab", "ac", "ba", "bc", "ca", "cb"} (into #{} (wordlist 2 `("a", "b", "c")))))
   )
 
 (deftest wordlist_a
