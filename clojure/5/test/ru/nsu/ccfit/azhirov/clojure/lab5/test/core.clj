@@ -1,5 +1,5 @@
-(ns lab5.test.core
-  (:use [lab5.core])
+(ns ru.nsu.ccfit.azhirov.clojure.lab5.test.core
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab5.core])
   (:use [clojure.test]))
 
 (deftest replace-me ;; FIXME: write
