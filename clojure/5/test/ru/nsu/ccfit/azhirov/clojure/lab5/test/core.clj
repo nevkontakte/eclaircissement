@@ -30,10 +30,10 @@
       f (integrate (fn [x] 1) 0.1)]
   (deftest perf
     (is (float-eq
-          50
-          (time (f 50))
+          125
+          (time (f 125))
           eps))
-    (is (float-eq 51 (time (f 51)) eps))
+    (is (float-eq 126 (time (f 126)) eps))
     )
   )
 
