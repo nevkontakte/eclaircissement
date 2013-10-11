@@ -27,6 +27,17 @@
   )
 
 (let [eps 0.01
+      f (integrate (fn [x] 1) 0.1)]
+  (deftest perf
+    (is (float-eq
+          50
+          (time (f 50))
+          eps))
+    (is (float-eq 51 (time (f 51)) eps))
+    )
+  )
+
+(let [eps 0.01
       f (integrate (fn [x] (+ x (Math/sin x))) 0.1)]
   (deftest complex-integration
     (is (float-eq 0 (f 0) eps))
