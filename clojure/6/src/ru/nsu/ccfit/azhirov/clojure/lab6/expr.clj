@@ -19,12 +19,12 @@
 (defn constant [value]
   "Create constant expression."
   {:pre [(or (true? value) (false? value))]}
-  (list ::const value))
+  (list :expr-const value))
 
 (defn constant? [expr]
   "Check if expression represents a constant."
   {:pre [(expression? expr)]}
-  (= ::const (first expr)))
+  (= :expr-const (first expr)))
 
 (defn constant-value [expr]
   "Get value of constant."
@@ -32,15 +32,16 @@
   (second expr))
 
 ; Variables
+
 (defn variable [name]
   "Create variable expression."
   {:pre [(keyword? name)]}
-  (list ::var name))
+  (list :expr-var name))
 
 (defn variable? [expr]
   "Check if expression represents a variable."
   {:pre [(expression? expr)]}
-  (and (= ::var (first expr)) (keyword? (second expr))))
+  (and (= :expr-var (first expr)) (keyword? (second expr))))
 
 (defn variable-name [expr]
   "Get name of a variable represented by expr."
@@ -101,15 +102,15 @@
 
 ; Conjunction
 
-(def conjunction (partial multi-op ::and))
+(def conjunction (partial multi-op :expr-and))
 
-(def conjunction? (partial multi-op? ::and))
+(def conjunction? (partial multi-op? :expr-and))
 
 ; Disjunction
 
-(def disjunction (partial multi-op ::or))
+(def disjunction (partial multi-op :expr-or))
 
-(def disjunction? (partial multi-op? ::or))
+(def disjunction? (partial multi-op? :expr-or))
 
 ; Negation
 
@@ -117,7 +118,7 @@
   "Check if expr represents negation of some expression."
   {:pre [(expression? expr)]}
   (and
-    (= ::not (first expr))
+    (= :expr-not (first expr))
     (expression? (second expr))))
 
 (defn negation [expr]
@@ -125,7 +126,7 @@
   {:pre [(expression? expr)]}
   (if (negation? expr)
     (arg expr)
-    (list ::not expr)))
+    (list :expr-not expr)))
 
 ; Implication
 
@@ -133,10 +134,10 @@
   "Check if expr represents implication."
   {:pre [(expression? expr)]}
   (and
-    (= ::follows (first expr))
+    (= :expr-follows (first expr))
     (expressions? (next expr))
     (= 2 (count (next expr)))))
 
 (defn implication [prerequisite, consequence]
   "Create implication expression."
-  (list ::follows prerequisite consequence))
+  (list :expr-follows prerequisite consequence))
