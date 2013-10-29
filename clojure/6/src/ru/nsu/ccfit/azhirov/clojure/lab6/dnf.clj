@@ -85,3 +85,65 @@
 (defn propagate-negation [expr]
   "Propagate negation signs down to atoms."
   (transform-expression propagate-negation-transform expr))
+
+; Phase 3
+
+(defn disjunct? [expr]
+  "Checks if expr forms a valid disjunct. It must be a term or conjunction of terms."
+  {:pre [(expression? expr)]}
+  (or
+    (term? expr)
+    (and
+      (conjunction? expr)
+      (every? term? (args expr)))))
+
+
+(defn quasi-disjunct? [expr]
+  "Check if expr froms a disjunct but also accept a conjucntion of an arbitrary expressions, not only terms."
+  {:pre [(expression? expr)]}
+  (or
+    (conjunction? expr)
+    (disjunct? expr)))
+
+(defn quasi-disjuncts [expr]
+  {:pre [(expression? expr)]
+   :post [(every? quasi-disjunct? %)]}
+  "List all top-level quasi-disjuncts of an expression expr. Expr must be expanded and negation in expr must be propagated."
+  (if (quasi-disjunct? expr)
+    (list expr)
+    (args expr)))
+
+(defn terms [expr]
+  "List all terms of a quasi-disjunct expr."
+  {:pre [(quasi-disjunct? expr)]}
+  (if (term? expr)
+    (list expr)
+    (args expr)))
+
+(defn dnf? [expr]
+  "Checks if expr is represented in DNF."
+  {:pre [(expression? expr)]}
+  (every? disjunct? (quasi-disjuncts expr)))
+
+(defn dnf-transform [expr]
+  "Perform a single step of DNF transformation."
+  {:pre [(quasi-disjunct? expr)]}
+  (if (disjunct? expr)
+    expr
+    (let ; If quasi-disjunct is not a disjunct, then if be a conjunction with at least one operand, which is a disjunction.
+        [all-terms (terms expr)
+         pseudo-term (first (filter (comp not term?) all-terms)) ; Find first non-term operand, it must be a disjunction
+         other-terms (remove #{pseudo-term} all-terms) ; Produce list of other operands
+         new-term-args (map (fn [t] (apply conjunction (concat other-terms (list t))))
+                         (args pseudo-term)) ; Apply distribution law: [a and b and (c or d)] => [(a and b and c) or (a and b and d)]
+         new-term (apply disjunction new-term-args)
+         ]
+      new-term)
+    ))
+
+(defn dnf [expr]
+  {:doc "Perform a single step of DNF transformation."
+   :pre [(expression? expr)]}
+  (if (dnf? expr)
+    expr
+    (recur (apply disjunction (map dnf-transform (quasi-disjuncts expr))))))

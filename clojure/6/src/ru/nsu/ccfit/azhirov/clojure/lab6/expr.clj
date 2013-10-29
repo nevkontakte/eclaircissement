@@ -141,3 +141,19 @@
 (defn implication [prerequisite, consequence]
   "Create implication expression."
   (list :expr-follows prerequisite consequence))
+
+; Atoms and terms
+
+(defn atom? [expr]
+  "Check if expr is an atom, i.e. a variable or constant."
+  (or
+    (variable? expr)
+    (constant? expr)))
+
+(defn term? [expr]
+  "Check if expr is a term, i.e. an atom or atom negation."
+  (or
+    (atom? expr)
+    (and
+      (negation? expr)
+      (atom? (arg expr)))))

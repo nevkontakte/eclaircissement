@@ -140,3 +140,23 @@
   (is (implication? (implication (variable :a) (variable :b))))
   (is (not (implication? (conjunction (variable :a) (variable :b)))))
   )
+
+; Atoms and terms
+
+(deftest atom?-test
+  (is (atom? (constant true)))
+  (is (atom? (constant false)))
+  (is (atom? (variable :a)))
+  (is (not (atom? (negation (constant true)))))
+  (is (not (atom? (negation (variable :a)))))
+  )
+
+(deftest term?-test
+  (is (term? (constant true)))
+  (is (term? (constant false)))
+  (is (term? (variable :a)))
+  (is (term? (negation (constant true))))
+  (is (term? (negation (variable :a))))
+  (is (not (term? (conjunction (variable :a) (variable :b)))))
+  (is (not (term? (disjunction (variable :a) (variable :b)))))
+  )
