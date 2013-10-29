@@ -58,3 +58,25 @@
 (deftest expand-implication
   (is (= (disjunction (negation (variable :a)) (variable :b))
          (expand (implication (variable :a) (variable :b))))))
+
+(deftest propagate-negation-transform-test
+  (is (=
+        (disjunction (negation (variable :a)) (negation (variable :b)))
+        (propagate-negation-transform
+          (negation (conjunction (variable :a) (variable :b))))))
+  (is (=
+        (conjunction (negation (variable :a)) (negation (variable :b)))
+        (propagate-negation-transform
+          (negation (disjunction (variable :a) (variable :b))))))
+  )
+
+(deftest propagate-negation-test
+  (is (=
+        (disjunction (variable :a) (negation (variable :b)))
+        (propagate-negation
+          (negation (conjunction (negation (variable :a)) (variable :b))))))
+  (is (=
+        (conjunction (variable :a) (negation (variable :b)))
+        (propagate-negation-transform
+          (negation (disjunction (negation (variable :a)) (variable :b))))))
+  )
