@@ -1,5 +1,9 @@
 (ns ru.nsu.ccfit.azhirov.clojure.lab6.test.expr
   (:use [ru.nsu.ccfit.azhirov.clojure.lab6.expr])
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.associatives])
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.atoms])
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.follows])
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.not])
   (:use [clojure.test]))
 
 ; Constants
@@ -141,7 +145,7 @@
   (is (not (implication? (conjunction (variable :a) (variable :b)))))
   )
 
-; Atoms and terms
+; Atoms
 
 (deftest atom?-test
   (is (atom? (constant true)))
@@ -151,12 +155,3 @@
   (is (not (atom? (negation (variable :a)))))
   )
 
-(deftest term?-test
-  (is (term? (constant true)))
-  (is (term? (constant false)))
-  (is (term? (variable :a)))
-  (is (term? (negation (constant true))))
-  (is (term? (negation (variable :a))))
-  (is (not (term? (conjunction (variable :a) (variable :b)))))
-  (is (not (term? (disjunction (variable :a) (variable :b)))))
-  )

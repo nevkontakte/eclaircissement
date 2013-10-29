@@ -1,6 +1,14 @@
 (ns ru.nsu.ccfit.azhirov.clojure.lab6.test.dnf
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.expr])
   (:use [ru.nsu.ccfit.azhirov.clojure.lab6.dnf])
-  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.expr :as expr])
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.associatives])
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.atoms])
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.follows])
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.not])
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.walk-tree])
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.expand])
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.propagate-negation])
+  (:use [ru.nsu.ccfit.azhirov.clojure.lab6.disjunct])
   (:use [clojure.test]))
 
 (defn reverse-transform [expr]
@@ -101,6 +109,16 @@
   (is (quasi-disjunct? (conjunction (disjunction (negation (variable :a)) (variable :b)) (variable :c)))) ; ((not a) and b) or c
   )
 
+(deftest term?-test
+  (is (term? (constant true)))
+  (is (term? (constant false)))
+  (is (term? (variable :a)))
+  (is (term? (negation (constant true))))
+  (is (term? (negation (variable :a))))
+  (is (not (term? (conjunction (variable :a) (variable :b)))))
+  (is (not (term? (disjunction (variable :a) (variable :b)))))
+  )
+
 (deftest terms-test
   (is (=
         (list (constant true))
@@ -113,13 +131,13 @@
         (terms (conjunction (negation (variable :a)) (variable :b)))))
   )
 
-(deftest dnf-transform-test
+(deftest dnf-disjunct-transform-test
   (is (=
         (disjunction
           (conjunction (variable :a) (variable :b) (variable :c))
           (conjunction (variable :a) (variable :b) (variable :d))
           )
-        (dnf-transform (conjunction
+        (dnf-disjunct-transform (conjunction
                          (variable :a)
                          (variable :b)
                          (disjunction (variable :c) (variable :d))))))
@@ -128,7 +146,7 @@
           (conjunction (variable :a) (variable :b) (disjunction (variable :e) (variable :f)) (variable :c))
           (conjunction (variable :a) (variable :b) (disjunction (variable :e) (variable :f)) (variable :d))
           )
-        (dnf-transform (conjunction
+        (dnf-disjunct-transform (conjunction
                          (variable :a)
                          (variable :b)
                          (disjunction (variable :c) (variable :d))
@@ -154,16 +172,16 @@
                    (variable :e)))))
   )
 
-(deftest dnf-test
-  (is (dnf? (dnf (constant true))))
-  (is (dnf? (dnf (variable :a))))
-  (is (dnf? (dnf (negation (variable :a)))))
-  (is (dnf? (dnf (conjunction (variable :a) (variable :b)))))
-  (is (dnf? (dnf (disjunction (variable :a) (variable :b)))))
-  (is (dnf? (dnf (disjunction (variable :a) (conjunction (variable :b) (negation (variable :c)))))))
+(deftest dnf-transform-test
+  (is (dnf? (dnf-transform (constant true))))
+  (is (dnf? (dnf-transform (variable :a))))
+  (is (dnf? (dnf-transform (negation (variable :a)))))
+  (is (dnf? (dnf-transform (conjunction (variable :a) (variable :b)))))
+  (is (dnf? (dnf-transform (disjunction (variable :a) (variable :b)))))
+  (is (dnf? (dnf-transform (disjunction (variable :a) (conjunction (variable :b) (negation (variable :c)))))))
   (is (=
         (disjunction (variable :a) (conjunction (variable :b) (negation (variable :c))))
-        (dnf (disjunction (variable :a) (conjunction (variable :b) (negation (variable :c)))))))
+        (dnf-transform (disjunction (variable :a) (conjunction (variable :b) (negation (variable :c)))))))
 
   (is (=
         (disjunction
@@ -172,9 +190,30 @@
           (conjunction (variable :a) (variable :b) (variable :d) (variable :e))
           (conjunction (variable :a) (variable :b) (variable :d) (variable :f))
           )
-        (dnf (conjunction
+        (dnf-transform (conjunction
                (variable :a)
                (variable :b)
                (disjunction (variable :c) (variable :d))
                (disjunction (variable :e) (variable :f))))))
+  (is (dnf? (dnf-transform (conjunction
+                             (variable :a)
+                             (variable :b)
+                             (disjunction (variable :c) (variable :d))
+                             (disjunction (variable :e) (variable :f))))))
+  )
+
+(deftest dnf-test
+  (=
+    (disjunction
+      (conjunction (variable :a) (negation (variable :b)))
+      (conjunction (variable :c) (variable :e))
+      (conjunction (variable :d) (variable :e))
+      )
+    (dnf (implication
+           (implication (variable :a) (variable :b))
+           (conjunction (disjunction (variable :c) (variable :d)) (variable :e))))
+    )
+  (is (dnf? (dnf (implication
+                   (implication (variable :a) (variable :b))
+                   (conjunction (disjunction (variable :c) (variable :d)) (variable :e))))))
   )
