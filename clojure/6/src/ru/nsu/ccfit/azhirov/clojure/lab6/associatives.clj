@@ -15,6 +15,7 @@
     (expressions? (next expr)) ; All args of conjunction must be expressions.
     ))
 
+; TODO Refactor args
 (defn associative-operator [op-name expr & rest]
   "Create multi-argument associative operator like conjunction or disjunction.
   Automatically expands expressions like (a && (b && c) && d) into (a && b && c && d)."
@@ -66,5 +67,6 @@
 (derive ::expr-and ::expr-deduplicated)
 (derive ::expr-or ::expr-deduplicated)
 
+; TODO Fix operator elimination if only one arg
 (defmethod deduplicate-args ::expr-deduplicated [expr]
   (cons (first expr) (distinct (args expr))))
