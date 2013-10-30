@@ -16,7 +16,9 @@
 
 ; Helper functions for accessing expression args
 
-(defn args [expr]
+(defmulti args "Get list of arguments of an operator." first)
+
+(defmethod args :default [expr]
   "Get arguments of an operatior"
   {:pre [(expression? expr) ; It must be an expression itself,
          (expressions? (next expr))]} ; and all it's arguments must be expressions too.

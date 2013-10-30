@@ -12,7 +12,9 @@
   (:use [clojure.test]))
 
 (defn reverse-transform [expr]
-  (cons (first expr) (reverse (args expr))))
+  (if (atom? expr)
+    expr
+    (cons (first expr) (reverse (args expr)))))
 
 (deftest transform-expression-test
   (is (= (variable :a)

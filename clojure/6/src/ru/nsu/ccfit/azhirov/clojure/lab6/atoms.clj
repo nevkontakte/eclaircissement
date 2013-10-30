@@ -4,6 +4,9 @@
 
 ; Constants
 
+(derive ::expr-const ::expr-atom)
+(derive ::expr-var ::expr-atom)
+
 (defn constant [value]
   "Create constant expression."
   {:pre [(or (true? value) (false? value))]}
@@ -52,13 +55,13 @@
 
 ; Tree traversal support
 
-(defmethod walk-tree ::expr-const [transformation expr]
-  "Stop expansion if const has been reached."
-  {:pre [(constant? expr)]}
+(defmethod walk-tree ::expr-atom [transformation expr]
+  "Stop expansion if atom has been reached."
+  {:pre [(atom? expr)]}
   expr)
 
-(defmethod walk-tree ::expr-var [transformation expr]
-  "Stop expansion if variable has been reached."
-  {:pre [(variable? expr)]}
-  expr)
+; Argument accessor
 
+(defmethod args ::expr-atom [expr]
+  "Atoms have no arguments."
+  `())
