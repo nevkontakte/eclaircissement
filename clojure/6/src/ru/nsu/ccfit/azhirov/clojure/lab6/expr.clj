@@ -30,8 +30,6 @@
          (= (count (args expr)) 1)]}
   (first (args expr)))
 
-(defmulti deduplicate-args "Deduplicate args utility for operators like 'and' and 'or'." first)
-(defmethod deduplicate-args :default [expr]
-  "Keep duplicate args by default."
-  {:pre [(expression? expr)]}
-  expr)
+; Polymorphic constructor
+(defmulti create "Create an expression specified by op-name keyword and arbitrary arguments."
+          (fn [op-name args] op-name))

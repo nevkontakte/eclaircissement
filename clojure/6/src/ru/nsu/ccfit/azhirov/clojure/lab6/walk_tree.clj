@@ -17,5 +17,5 @@
 (defmethod walk-tree :default [transformation expr]
   "By default do not alter an operator, but expand it's operands."
   {:pre [(expression? expr)]}
-  (cons (first expr) (map (partial transform-expression transformation) (args expr))))
+  (create (first expr) (map (partial transform-expression transformation) (args expr))))
 

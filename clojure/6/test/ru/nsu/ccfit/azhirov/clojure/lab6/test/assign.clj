@@ -16,4 +16,7 @@
   (is (=
         (disjunction (constant true) (variable :b))
         (assign {:a true} (disjunction (variable :a) (variable :b)))))
+  (is (=
+        (constant true)
+        (assign {:a true :b true} (disjunction (variable :a) (variable :b)))))
   )

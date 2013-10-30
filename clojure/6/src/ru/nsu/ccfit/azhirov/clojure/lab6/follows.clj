@@ -27,3 +27,8 @@
   (let [prerequisite (expand-transform (first (args expr)))
         consequence (expand-transform (second (args expr)))]
     (disjunction (negation prerequisite) consequence)))
+
+; Polymorphic constructor
+
+(defmethod create ::expr-follows [_, args]
+  (implication (first args) (second args)))

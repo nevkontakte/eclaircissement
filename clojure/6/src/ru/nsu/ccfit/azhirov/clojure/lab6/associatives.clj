@@ -15,23 +15,26 @@
     (expressions? (next expr)) ; All args of conjunction must be expressions.
     ))
 
+(defn flattern-args [op-name exprs]
+  "Apply associative rule to operator args."
+  (reduce (fn [processed current-arg]
+            (if (associative-operator? op-name current-arg)
+              (concat processed (args current-arg))
+              (concat processed (list current-arg))))
+          `()
+          exprs))
+
 ; TODO Refactor args
-(defn associative-operator [op-name expr & rest]
+(defn associative-operator [op-name & op-args]
   "Create multi-argument associative operator like conjunction or disjunction.
   Automatically expands expressions like (a && (b && c) && d) into (a && b && c && d)."
   {:pre [(keyword? op-name)
-         (expressions? (cons expr rest))]}
-  (if (nil? rest)
-    expr
-    (let [raw-args (cons expr rest)
-          flat-args (reduce (fn [partial-args arg]
-                              (if (associative-operator? op-name arg)
-                                (concat partial-args (args arg))
-                                (concat partial-args (list arg))))
-                            `()
-                            raw-args)
-          ]
-      (deduplicate-args (cons op-name flat-args)))))
+         (expressions? op-args)]}
+  (let [flat-args (flattern-args op-name op-args)
+        deduplicated-args (distinct flat-args)]
+    (if (seq (next deduplicated-args))
+      (cons op-name deduplicated-args)
+      (first deduplicated-args))))
 
 (derive ::expr-and ::expr-assoc)
 (derive ::expr-or ::expr-assoc)
@@ -62,11 +65,7 @@
   (let [expr (arg expr)]
     (apply conjunction (map negation (args expr)))))
 
-; Arguments deduplication
+; Polymorphic constructor
 
-(derive ::expr-and ::expr-deduplicated)
-(derive ::expr-or ::expr-deduplicated)
-
-; TODO Fix operator elimination if only one arg
-(defmethod deduplicate-args ::expr-deduplicated [expr]
-  (cons (first expr) (distinct (args expr))))
+(defmethod create ::expr-assoc [op-name, args]
+  (apply associative-operator op-name args))

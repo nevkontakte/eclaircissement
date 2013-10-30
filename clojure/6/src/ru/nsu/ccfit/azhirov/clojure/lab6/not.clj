@@ -18,3 +18,7 @@
     (list ::expr-not expr)))
 
 
+; Polymorphic constructor
+
+(defmethod create ::expr-not [_, args]
+  (negation (first args)))

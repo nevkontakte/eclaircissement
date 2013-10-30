@@ -163,3 +163,24 @@
   (is (not (atom? (negation (variable :a)))))
   )
 
+; Create
+(deftest create-test
+  (is (=
+        (create (first (constant false)) `(true))
+        (constant true)))
+  (is (=
+        (create (first (variable :a)) `(:b))
+        (variable :b)))
+  (is (=
+        (create (first (negation (variable :a))) (list (variable :b)))
+        (negation (variable :b))))
+  (is (=
+        (create (first (conjunction (variable :a) (variable :b))) (list (variable :c) (variable :d)))
+        (conjunction (variable :c) (variable :d))))
+  (is (=
+        (create (first (disjunction (variable :a) (variable :b))) (list (variable :c) (variable :d)))
+        (disjunction (variable :c) (variable :d))))
+  (is (=
+        (create (first (implication (variable :a) (variable :b))) (list (variable :c) (variable :d)))
+        (implication (variable :c) (variable :d))))
+  )

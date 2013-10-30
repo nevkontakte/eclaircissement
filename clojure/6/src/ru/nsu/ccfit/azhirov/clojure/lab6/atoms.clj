@@ -65,3 +65,11 @@
 (defmethod args ::expr-atom [expr]
   "Atoms have no arguments."
   `())
+
+; Polymorphic constructor
+
+(defmethod create ::expr-var [_, args]
+  (variable (first args)))
+
+(defmethod create ::expr-const [_, args]
+  (constant (first args)))
