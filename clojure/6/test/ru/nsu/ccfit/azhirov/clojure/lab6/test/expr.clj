@@ -80,6 +80,10 @@
   (is (not (variable? (conjunction (variable :a) (variable :b)))))
   (is (not (variable? (conjunction (variable :a) (variable :b) (variable :c)))))
   (is (variable? (conjunction (variable :a))))
+  (is (=
+        (conjunction (variable :a) (variable :b) (variable :a))
+        (conjunction (variable :a) (variable :b))
+        ))
   )
 
 (deftest conjunction?-test
@@ -97,6 +101,10 @@
   (is (not (=
              (disjunction (variable :a) (variable :b))
              (conjunction (variable :a) (variable :b)))))
+  (is (=
+        (disjunction (variable :a) (variable :b) (variable :a))
+        (disjunction (variable :a) (variable :b))
+        ))
   )
 
 (deftest disjunction?-test

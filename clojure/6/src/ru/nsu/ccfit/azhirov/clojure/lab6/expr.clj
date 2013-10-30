@@ -30,3 +30,8 @@
          (= (count (args expr)) 1)]}
   (first (args expr)))
 
+(defmulti deduplicate-args "Deduplicate args utility for operators like 'and' and 'or'." first)
+(defmethod deduplicate-args :default [expr]
+  "Keep duplicate args by default."
+  {:pre [(expression? expr)]}
+  expr)

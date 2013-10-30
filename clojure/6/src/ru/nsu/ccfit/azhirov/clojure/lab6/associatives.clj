@@ -30,7 +30,10 @@
                             `()
                             raw-args)
           ]
-      (cons op-name flat-args))))
+      (deduplicate-args (cons op-name flat-args)))))
+
+(derive ::expr-and ::expr-assoc)
+(derive ::expr-or ::expr-assoc)
 
 ; Conjunction
 
@@ -57,3 +60,11 @@
   {:pre [(negation? expr) (disjunction? (arg expr))]}
   (let [expr (arg expr)]
     (apply conjunction (map negation (args expr)))))
+
+; Arguments deduplication
+
+(derive ::expr-and ::expr-deduplicated)
+(derive ::expr-or ::expr-deduplicated)
+
+(defmethod deduplicate-args ::expr-deduplicated [expr]
+  (cons (first expr) (distinct (args expr))))
