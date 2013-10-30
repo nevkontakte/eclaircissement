@@ -7,7 +7,7 @@
   "Check if expr represents negation of some expression."
   {:pre [(expression? expr)]}
   (and
-    (= :expr-not (first expr))
+    (= ::expr-not (first expr))
     (expression? (second expr))))
 
 (defn negation [expr]
@@ -15,6 +15,6 @@
   {:pre [(expression? expr)]}
   (if (negation? expr)
     (arg expr)
-    (list :expr-not expr)))
+    (list ::expr-not expr)))
 
 
