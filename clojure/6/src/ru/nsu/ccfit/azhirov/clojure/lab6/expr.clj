@@ -27,7 +27,6 @@
 (defn arg [expr]
   "Get single argument of an unary operator"
   {:pre [(expression? expr)
-         (expression? (second expr))
-         (nil? (second (rest expr)))]}
-  (second expr))
+         (= (count (args expr)) 1)]}
+  (first (args expr)))
 
