@@ -7,12 +7,12 @@
 (defn constant [value]
   "Create constant expression."
   {:pre [(or (true? value) (false? value))]}
-  (list :expr-const value))
+  (list ::expr-const value))
 
 (defn constant? [expr]
   "Check if expression represents a constant."
   {:pre [(expression? expr)]}
-  (= :expr-const (first expr)))
+  (= ::expr-const (first expr)))
 
 (defn constant-value [expr]
   "Get value of constant."
@@ -24,12 +24,12 @@
 (defn variable [name]
   "Create variable expression."
   {:pre [(keyword? name)]}
-  (list :expr-var name))
+  (list ::expr-var name))
 
 (defn variable? [expr]
   "Check if expression represents a variable."
   {:pre [(expression? expr)]}
-  (and (= :expr-var (first expr)) (keyword? (second expr))))
+  (and (= ::expr-var (first expr)) (keyword? (second expr))))
 
 (defn variable-name [expr]
   "Get name of a variable represented by expr."
@@ -50,12 +50,14 @@
     (variable? expr)
     (constant? expr)))
 
-(defmethod walk-tree :expr-const [transformation expr]
+; Tree traversal support
+
+(defmethod walk-tree ::expr-const [transformation expr]
   "Stop expansion if const has been reached."
   {:pre [(constant? expr)]}
   expr)
 
-(defmethod walk-tree :expr-var [transformation expr]
+(defmethod walk-tree ::expr-var [transformation expr]
   "Stop expansion if variable has been reached."
   {:pre [(variable? expr)]}
   expr)
