@@ -24,8 +24,8 @@
           `()
           exprs))
 
-; TODO Refactor args
-(defn associative-operator [op-name & op-args]
+
+(defmethod create ::expr-assoc [op-name op-args]
   "Create multi-argument associative operator like conjunction or disjunction.
   Automatically expands expressions like (a && (b && c) && d) into (a && b && c && d)."
   {:pre [(keyword? op-name)
@@ -41,13 +41,13 @@
 
 ; Conjunction
 
-(def conjunction (partial associative-operator ::expr-and))
+(defn conjunction [ & args] (create ::expr-and args))
 
 (def conjunction? (partial associative-operator? ::expr-and))
 
 ; Disjunction
 
-(def disjunction (partial associative-operator ::expr-or))
+(defn disjunction [ & args] (create ::expr-or args))
 
 (def disjunction? (partial associative-operator? ::expr-or))
 
@@ -64,8 +64,3 @@
   {:pre [(negation? expr) (disjunction? (arg expr))]}
   (let [expr (arg expr)]
     (apply conjunction (map negation (args expr)))))
-
-; Polymorphic constructor
-
-(defmethod create ::expr-assoc [op-name, args]
-  (apply associative-operator op-name args))

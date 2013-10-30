@@ -14,7 +14,7 @@
 (defn reverse-transform [expr]
   (if (atom? expr)
     expr
-    (cons (first expr) (reverse (args expr)))))
+    (create (first expr) (reverse (args expr)))))
 
 (deftest transform-expression-test
   (is (= (variable :a)
